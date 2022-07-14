@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-
-const { getProducts } = require('../controllers/ProductController');
+/**
+ * Controllers Required
+ */
+const { getProducts, newProduct, getSingleProduct } = require('../controllers/ProductController');
 
 /**
  * GET Requests
  */
 router.route('/products').get(getProducts);
+router.route('/product/:id').get(getSingleProduct);
+
+/**
+ * POST Requests
+ */
+router.route('/product/new').post(newProduct);
 
 
 
