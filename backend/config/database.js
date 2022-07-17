@@ -8,7 +8,7 @@ const connectDatabase = () => {
             // useCreateIndex: true,
             useUnifiedTopology: true
         }).then(con => {
-            console.log(`MongoDB Connection Succeeded With HOST : ${con.connection.host} .`)
+            console.log(`MongoDB Connection Succeeded With HOST: ${con.connection.host} , PORT: ${con.connection.port} .`)
         })
         .catch((error) => console.error("MongoDB connection failed:", error.message))
 

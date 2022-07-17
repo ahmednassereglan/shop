@@ -3,21 +3,37 @@
  */
 const Product = require('../models/product');
 const ErrorHandler = require('../utils/errorHandler');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+const APIFeatures = require('../utils/apiFeatures')
+    /**
+     ***************************** GET Requests *****************************
+     */
 
-/**
- ***************************** GET Requests *****************************
- */
+// Get all Products => /api/v1/products OR /api/v1/products?keyword=apple
+exports.getProducts = catchAsyncErrors(async(req, res, next) => {
 
-// Get all Products => /api/v1/products
-exports.getProducts = async(req, res, next) => {
+    const resPerPage = 4;
+    const productsCount = await Product.countDocuments();
 
-    const products = await Product.find();
+    const apiFeatures = new APIFeatures(Product.find(), req.query)
+        .search()
+        .filter()
+        .pagination(resPerPage)
+
+    const products = await apiFeatures.query;
+    let filteredProductsCount = products.length;
+
+    // apiFeatures.pagination(resPerPage)
+    // products = await apiFeatures.query;
+
     res.status(200).json({
         success: true,
-        count: products.length,
+        productsCount,
+        resPerPage,
+        filteredProductsCount,
         products
     })
-}
+})
 
 
 /**
@@ -25,21 +41,21 @@ exports.getProducts = async(req, res, next) => {
  */
 
 // Create new Product (The admin can do this only) => /api/v1/admin/product/new
-exports.newProduct = async(req, res, next) => {
+exports.newProduct = catchAsyncErrors(async(req, res, next) => {
 
     const product = await Product.create(req.body);
     res.status(201).json({
         success: true,
         product
     })
-}
+})
 
 /**
  ***************************** SHOW Requests *****************************
  */
 
 // Get single product details  => /api/v1/product/:id
-exports.getSingleProduct = async(req, res, next) => {
+exports.getSingleProduct = catchAsyncErrors(async(req, res, next) => {
 
     const ProductId = req.params.id;
     const product = await Product.findById(ProductId);
@@ -56,22 +72,19 @@ exports.getSingleProduct = async(req, res, next) => {
         product
     })
 
-}
+})
 
 /**
  ***************************** PUT Requests *****************************
  */
 
 // Update Product (The admin can do this only)  => /api/v1/admin/product/edit/:id
-exports.updateProduct = async(req, res, next) => {
+exports.updateProduct = catchAsyncErrors(async(req, res, next) => {
 
     const ProductId = req.params.id;
     let product = await Product.findById(ProductId);
     if (!product) {
-        return res.status(404).json({
-            success: true,
-            message: 'Product not found'
-        })
+        return next(new ErrorHandler('Product not found', 404));
     }
 
     product = await Product.findByIdAndUpdate(ProductId, req.body, {
@@ -85,7 +98,7 @@ exports.updateProduct = async(req, res, next) => {
         product
     })
 
-}
+})
 
 /**
  ***************************** DELETE Requests *****************************
@@ -93,15 +106,12 @@ exports.updateProduct = async(req, res, next) => {
 
 // Delete Product (The admin can do this only)  => /api/v1/admin/product/delete/:id
 
-exports.deleteProduct = async(req, res, next) => {
+exports.deleteProduct = catchAsyncErrors(async(req, res, next) => {
 
     const ProductId = req.params.id;
     const product = await Product.findById(ProductId);
     if (!product) {
-        return res.status(404).json({
-            success: true,
-            message: 'Product not found'
-        })
+        return next(new ErrorHandler('Product not found', 404));
     }
 
     await Product.remove()
@@ -111,4 +121,4 @@ exports.deleteProduct = async(req, res, next) => {
         message: 'Product is Deleted'
     })
 
-}
+})
