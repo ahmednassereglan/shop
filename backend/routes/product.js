@@ -23,17 +23,17 @@ router.route('/product/:id').get(getSingleProduct);
 /**
  * POST Requests
  */
-router.route('/admin/product/new').post(isAuthenticatedUser, newProduct);
+router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), newProduct);
 
 /**
  * PUT Requests
  */
-router.route('/admin/product/edit/:id').put(isAuthenticatedUser, updateProduct);
+router.route('/admin/product/edit/:id').put(isAuthenticatedUser, authorizeRoles('admin'), updateProduct);
 
 /**
  * DELETE Requests
  */
-router.route('/admin/product/delete/:id').delete(isAuthenticatedUser, deleteProduct);
+router.route('/admin/product/delete/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
 
 
 

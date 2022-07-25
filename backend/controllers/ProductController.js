@@ -23,8 +23,6 @@ exports.getProducts = catchAsyncErrors(async(req, res, next) => {
     const products = await apiFeatures.query;
     let filteredProductsCount = products.length;
 
-    // apiFeatures.pagination(resPerPage)
-    // products = await apiFeatures.query;
 
     res.status(200).json({
         success: true,
@@ -43,6 +41,7 @@ exports.getProducts = catchAsyncErrors(async(req, res, next) => {
 // Create new Product (The admin can do this only) => /api/v1/admin/product/new
 exports.newProduct = catchAsyncErrors(async(req, res, next) => {
 
+    req.body.user = req.user.id;
     const product = await Product.create(req.body);
     res.status(201).json({
         success: true,
