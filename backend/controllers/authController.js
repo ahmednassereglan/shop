@@ -31,20 +31,12 @@ exports.registerUser = catchAsyncErrors(async(req, res, next) => {
         }
     })
 
-    // sendToken(user, 200, res)
-    const token = user.getJwtToken()
-
-    res.status(201).json({
-        success: true,
-        token,
-
-    })
+    sendToken(user, 200, res)
 
 })
 
 
 // Login a user   => /api/v1/login
-
 exports.loginUser = catchAsyncErrors(async(req, res, next) => {
     const { email, password } = req.body;
 
@@ -67,11 +59,18 @@ exports.loginUser = catchAsyncErrors(async(req, res, next) => {
         return next(new ErrorHandler('Invalid Password', 401));
     }
 
-    const token = user.getJwtToken()
+    sendToken(user, 200, res)
+})
+
+// Logout a user   => /api/v1/logout
+exports.logout = catchAsyncErrors(async(req, res, next) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    })
 
     res.status(200).json({
         success: true,
-        token,
-
+        message: 'Logged out'
     })
 })

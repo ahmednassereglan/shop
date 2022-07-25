@@ -7,6 +7,7 @@ const router = express.Router();
 const {
     registerUser,
     loginUser,
+    logout,
 
 
 } = require('../controllers/authController');
@@ -15,6 +16,7 @@ const {
 /**
  * GET Requests
  */
+router.route('/logout').get(logout);
 
 
 

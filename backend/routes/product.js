@@ -12,6 +12,8 @@ const {
     deleteProduct
 } = require('../controllers/ProductController');
 
+const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
+
 /**
  * GET Requests
  */
@@ -21,17 +23,17 @@ router.route('/product/:id').get(getSingleProduct);
 /**
  * POST Requests
  */
-router.route('/admin/product/new').post(newProduct);
+router.route('/admin/product/new').post(isAuthenticatedUser, newProduct);
 
 /**
  * PUT Requests
  */
-router.route('/admin/product/edit/:id').put(updateProduct);
+router.route('/admin/product/edit/:id').put(isAuthenticatedUser, updateProduct);
 
 /**
  * DELETE Requests
  */
-router.route('/admin/product/delete/:id').delete(deleteProduct);
+router.route('/admin/product/delete/:id').delete(isAuthenticatedUser, deleteProduct);
 
 
 

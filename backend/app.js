@@ -5,7 +5,7 @@
  */
 
 const express = require('express');
-
+const cookieParser = require('cookie-parser')
 
 /**
  * App Variables
@@ -23,6 +23,7 @@ const auth = require('./routes/auth');
 // ******* App Usages *************** //
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/v1', products);
