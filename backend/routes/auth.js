@@ -6,6 +6,7 @@ const router = express.Router();
  */
 const {
     registerUser,
+    loginUser,
 
 
 } = require('../controllers/authController');
@@ -21,6 +22,7 @@ const {
  * POST Requests
  */
 router.route('/register').post(registerUser);
+router.route('/login').post(loginUser);
 
 
 
