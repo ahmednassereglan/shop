@@ -2,12 +2,24 @@
  * Models Modules
  */
 const Product = require('../models/product');
-const ErrorHandler = require('../utils/errorHandler');
+
+
+/**
+ * Middlewares Modules
+ */
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+
+
+/**
+ * Utils Modules
+ */
+const ErrorHandler = require('../utils/errorHandler');
 const APIFeatures = require('../utils/apiFeatures')
-    /**
-     ***************************** GET Requests *****************************
-     */
+
+
+/**
+ ***************************** GET Requests *****************************
+ */
 
 // Get all Products => /api/v1/products OR /api/v1/products?keyword=apple
 exports.getProducts = catchAsyncErrors(async(req, res, next) => {

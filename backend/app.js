@@ -19,6 +19,7 @@ const app = express();
 const errorMiddleware = require('./middlewares/errors');
 const products = require('./routes/product');
 const auth = require('./routes/auth');
+const orders = require('./routes/order');
 
 // ******* App Usages *************** //
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/v1', products);
 app.use('/api/v1', auth);
+app.use('/api/v1', orders);
 
 // Middleware to handle errors
 app.use(errorMiddleware);
