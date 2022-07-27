@@ -9,7 +9,10 @@ const {
     newProduct,
     getSingleProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    createProductReview,
+    getProductReviews,
+    deleteReview,
 } = require('../controllers/ProductController');
 
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
@@ -19,6 +22,7 @@ const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
  */
 router.route('/products').get(getProducts);
 router.route('/product/:id').get(getSingleProduct);
+router.route('/reviews').get(isAuthenticatedUser, getProductReviews);
 
 /**
  * POST Requests
@@ -29,11 +33,13 @@ router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('adm
  * PUT Requests
  */
 router.route('/admin/product/edit/:id').put(isAuthenticatedUser, authorizeRoles('admin'), updateProduct);
+router.route('/review').put(isAuthenticatedUser, createProductReview);
 
 /**
  * DELETE Requests
  */
 router.route('/admin/product/delete/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
+router.route('/reviews').delete(isAuthenticatedUser, deleteReview);
 
 
 
